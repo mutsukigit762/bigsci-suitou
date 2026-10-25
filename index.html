@@ -12,14 +12,9 @@
 :root{
   --bg:#eef1f3; --card:#ffffff; --ink:#1f2a33; --sub:#5d6b77; --line:#d5dbe0;
   --accent:#2f6d8f; --done:#2f7d55; --donebg:#e4f2ea; --past:#8a96a0;
+  color-scheme:light;
   --f:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#141a1f; --card:#1d252c; --ink:#e3e9ee; --sub:#9aa8b3; --line:#2e3a44;
-  --accent:#7fb6d6; --done:#7fd1a3; --donebg:#1f3329; --past:#6d7a84; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#141a1f; --card:#1d252c; --ink:#e3e9ee; --sub:#9aa8b3; --line:#2e3a44;
-  --accent:#7fb6d6; --done:#7fd1a3; --donebg:#1f3329; --past:#6d7a84; color-scheme:dark}
 body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:15px;margin:0}
 .wrap{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:16px 48px}
 h1{font-size:20px;margin:4px 0 2px;text-wrap:balance}
