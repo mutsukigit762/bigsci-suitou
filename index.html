@@ -38,7 +38,7 @@ h1{font-size:20px;margin:4px 0 2px;text-wrap:balance}
 .no{flex:none;font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--sub);width:6.6em}
 .ti{min-width:0;flex:1;overflow-wrap:anywhere}
 .row.on .ti{color:var(--sub)}
-.star{color:var(--accent);font-weight:700}
+.star{color:#d33a3a;font-weight:700}
 @media (prefers-reduced-motion:reduce){.prog i{transition:none}}
 </style>
 </head>
@@ -151,7 +151,7 @@ onAuthStateChanged(auth, (user)=>{
   unsub=onSnapshot(DATA_DOC, async (snap)=>{
     if(!snap.exists()){ await setDoc(DATA_DOC, {marks: SEED}); return; }
     marks={...(snap.data().marks||{})}; ready=true; render();
-    $("st").textContent="タップでチェック。★は雪の結晶・葉痕の候補。";
+    $("st").textContent="タップでチェック。★は強い見覚えあり（雪の結晶・葉痕の候補）。";
   }, (e)=>{ $("st").textContent="記録を読めませんでした："+(e&&e.code||e); });
 });
 </script>
