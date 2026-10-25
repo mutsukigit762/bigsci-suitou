@@ -134,8 +134,7 @@ function render(){
       const no=document.createElement("span"); no.className="no"; no.textContent=id+"　"+date;
       const ti=document.createElement("span"); ti.className="ti"; ti.textContent=title;
       if(STAR0[id]){const st=document.createElement("span"); st.className="star0"; st.textContent=" ★"; ti.appendChild(st);}
-      else if(STAR[id]){const st=document.createElement("span"); st.className="star"; st.textContent=" ★"; ti.appendChild(st);}
-      else if(STAR2[id]){const st=document.createElement("span"); st.className="star2"; st.textContent=" ☆"; ti.appendChild(st);}
+      else if(STAR[id]||STAR2[id]){const st=document.createElement("span"); st.className="star"; st.textContent=" ⭐︎"; ti.appendChild(st);}
       const rt=document.createElement("span"); rt.className="rt";
       if(m){const d=document.createElement("span"); d.className="rd"; d.textContent=m.slice(5).replace("-","/"); rt.appendChild(d);}
       if(COMMENTS[id]){const c=document.createElement("span"); c.className="rc"; c.textContent=COMMENTS[id]; rt.appendChild(c);}
@@ -183,7 +182,7 @@ onAuthStateChanged(auth, (user)=>{
   unsub=onSnapshot(DATA_DOC, async (snap)=>{
     if(!snap.exists()){ await setDoc(DATA_DOC, {marks: SEED}); return; }
     marks={...(snap.data().marks||{})}; ready=true; render();
-    $("st").textContent="タップで出納済み（チェック）。右に出納日とひとこと。黒★は「やばい」号（記憶の強さが最上位）。赤★は強い見覚えあり（雪の結晶・葉痕の候補）。☆は見覚えあり（弱め）。";
+    $("st").textContent="タップで出納済み（チェック）。右に出納日とひとこと。★は「やばい」号（記憶の強さが最上位）。⭐︎は見覚えあり。";
   }, (e)=>{ $("st").textContent="記録を読めませんでした："+(e&&e.code||e); });
 });
 </script>
