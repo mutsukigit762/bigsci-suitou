@@ -39,6 +39,7 @@ h1{font-size:20px;margin:4px 0 2px;text-wrap:balance}
 .ti{min-width:0;flex:1;overflow-wrap:anywhere}
 .row.on .ti{color:var(--sub)}
 .star{color:#d33a3a;font-weight:700}
+.star2{color:#d33a3a;font-weight:700}
 @media (prefers-reduced-motion:reduce){.prog i{transition:none}}
 </style>
 </head>
@@ -83,7 +84,8 @@ const VOLS=[
  [33,2003,"ムツキが年中",["はな","ちいさなつぼみ","みずであそぼう","むしのへんしん","すいかがみのった","チーターはしる","おいもほり","なんのうんてんせき?","きょうりゅうナンバーワン","とりのはね","チョコレートだいすき","ここがせかいいち"]],
  [34,2004,"ムツキが年長",["ぼくはざりがに","どうぶつのあかちゃん","へんしんペットボトル","かぶとむしのいちねん","たこといかにてる?にてない?","ゴーゴーはしごしゃ","ほしぞらウォッチング","いろがかわった","およぐとりペンギン","ゆきゆきゆき","やさいはいきている","にほんざるのあかちゃんおおきくなったよ!"]]
 ];
-const STAR={"29-11":1,"30-1":1,"30-3":1,"30-11":1,"30-7":1}; // 雪の結晶・葉痕の候補
+const STAR={"29-11":1,"30-1":1,"30-3":1,"30-11":1,"30-7":1};
+const STAR2={"33-11":1}; // 見覚えはある、弱め（☆） // 雪の結晶・葉痕の候補
 let marks={}; let busy={}; let ready=false;
 const $=id=>document.getElementById(id);
 function ym(fy,n){const m=n+3; return m<=12?fy+"."+m:(fy+1)+"."+(m-12);}
@@ -108,6 +110,7 @@ function render(){
       const no=document.createElement("span"); no.className="no"; no.textContent=id+"　"+date;
       const ti=document.createElement("span"); ti.className="ti"; ti.textContent=title;
       if(STAR[id]){const st=document.createElement("span"); st.className="star"; st.textContent=" ★"; ti.appendChild(st);}
+      else if(STAR2[id]){const st=document.createElement("span"); st.className="star2"; st.textContent=" ☆"; ti.appendChild(st);}
       b.append(bx,no,ti);
       b.addEventListener("click",()=>toggle(id));
       sec.appendChild(b);
@@ -151,7 +154,7 @@ onAuthStateChanged(auth, (user)=>{
   unsub=onSnapshot(DATA_DOC, async (snap)=>{
     if(!snap.exists()){ await setDoc(DATA_DOC, {marks: SEED}); return; }
     marks={...(snap.data().marks||{})}; ready=true; render();
-    $("st").textContent="タップでチェック。★は強い見覚えあり（雪の結晶・葉痕の候補）。";
+    $("st").textContent="タップでチェック。★は強い見覚えあり（雪の結晶・葉痕の候補）。☆は見覚えあり（弱め）。";
   }, (e)=>{ $("st").textContent="記録を読めませんでした："+(e&&e.code||e); });
 });
 </script>
