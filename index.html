@@ -34,7 +34,11 @@ h1{font-size:20px;margin:4px 0 2px;text-wrap:balance}
 .row.on{background:var(--donebg)}
 .row.on .box{background:var(--done);border-color:var(--done)}
 
-.row.past .box{border-style:dashed;border-color:var(--past);color:var(--past);font-size:11px;width:auto;min-width:26px;padding:0 3px}
+.row.past .box{background:var(--done);border-color:var(--done)}
+.rt{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:2px;max-width:44%;text-align:right;font-size:12px;line-height:1.4;color:var(--sub)}
+.rt:empty{display:none}
+.rd{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink)}
+.rc{overflow-wrap:anywhere}
 .no{flex:none;font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--sub);width:6.6em}
 .ti{min-width:0;flex:1;overflow-wrap:anywhere}
 .row.on .ti{color:var(--sub)}
@@ -85,7 +89,22 @@ const VOLS=[
  [34,2004,"ムツキが年長",["ぼくはざりがに","どうぶつのあかちゃん","へんしんペットボトル","かぶとむしのいちねん","たこといかにてる?にてない?","ゴーゴーはしごしゃ","ほしぞらウォッチング","いろがかわった","およぐとりペンギン","ゆきゆきゆき","やさいはいきている","にほんざるのあかちゃんおおきくなったよ!"]]
 ];
 const STAR={"30-1":1,"30-3":1,"30-7":1,"34-7":1,"34-10":1};
-const STAR2={"33-11":1,"34-5":1}; // 見覚えはある、弱め（☆） // 雪の結晶・葉痕の候補
+const STAR2={"33-11":1,"34-5":1}; // 見覚えはある、弱め（☆）
+// ムツキのひとこと感想（右側に出す。メモ dokusho/ビッグサイエンス読書記録.md から）
+const COMMENTS={
+ "29-11":"見覚えない",
+ "30-1":"死ぬほど見覚え。象は折り込み",
+ "30-3":"アホほど見覚え。写真が美しい",
+ "30-11":"見覚えはあんまり",
+ "32-3":"全ページ見覚え。やばい号",
+ "32-4":"見覚えはそんなにない",
+ "32-6":"写真にイラスト。目線が合わない",
+ "32-9":"料理人の顔が最初と最後で同じ",
+ "33-11":"見覚えは弱め",
+ "34-5":"見覚えはあるが感動は薄い",
+ "34-7":"「うちゅうをそのままみられるよ」覚えてる",
+ "34-10":"雪の大谷のバス。結晶10枚"
+}; // 雪の結晶・葉痕の候補
 let marks={}; let busy={}; let ready=false;
 const $=id=>document.getElementById(id);
 function ym(fy,n){const m=n+3; return m<=12?fy+"."+m:(fy+1)+"."+(m-12);}
@@ -106,12 +125,15 @@ function render(){
       const b=document.createElement("button"); b.type="button";
       b.className="row"+(on?" on":"")+(past?" past":"");
       b.setAttribute("aria-pressed",m?"true":"false");
-      const bx=document.createElement("span"); bx.className="box"; bx.textContent=on?"✓":(past?m.slice(5).replace("-","/"):"");
+      const bx=document.createElement("span"); bx.className="box"; bx.textContent=m?"✓":"";
       const no=document.createElement("span"); no.className="no"; no.textContent=id+"　"+date;
       const ti=document.createElement("span"); ti.className="ti"; ti.textContent=title;
       if(STAR[id]){const st=document.createElement("span"); st.className="star"; st.textContent=" ★"; ti.appendChild(st);}
       else if(STAR2[id]){const st=document.createElement("span"); st.className="star2"; st.textContent=" ☆"; ti.appendChild(st);}
-      b.append(bx,no,ti);
+      const rt=document.createElement("span"); rt.className="rt";
+      if(m){const d=document.createElement("span"); d.className="rd"; d.textContent=m.slice(5).replace("-","/"); rt.appendChild(d);}
+      if(COMMENTS[id]){const c=document.createElement("span"); c.className="rc"; c.textContent=COMMENTS[id]; rt.appendChild(c);}
+      b.append(bx,no,ti,rt);
       b.addEventListener("click",()=>toggle(id));
       sec.appendChild(b);
     }
@@ -127,6 +149,7 @@ async function toggle(id){
   const was=marks[id];
   try{
     if(was===TODAY){ delete marks[id]; render(); await updateDoc(DATA_DOC, {["marks."+id]: deleteField()}); }
+    else if(was){ $("st").textContent=id+" は "+was.slice(5).replace("-","/")+" に出納済みです（別の日の記録は消しません）"; }
     else{ marks[id]=TODAY; render(); await setDoc(DATA_DOC, {marks: {[id]: TODAY}}, {merge: true}); }
   }catch(e){
     if(was) marks[id]=was; else delete marks[id]; render();
@@ -154,7 +177,7 @@ onAuthStateChanged(auth, (user)=>{
   unsub=onSnapshot(DATA_DOC, async (snap)=>{
     if(!snap.exists()){ await setDoc(DATA_DOC, {marks: SEED}); return; }
     marks={...(snap.data().marks||{})}; ready=true; render();
-    $("st").textContent="タップでチェック。★は強い見覚えあり（雪の結晶・葉痕の候補）。☆は見覚えあり（弱め）。";
+    $("st").textContent="タップで出納済み（チェック）。右に出納日とひとこと。★は強い見覚えあり（雪の結晶・葉痕の候補）。☆は見覚えあり（弱め）。";
   }, (e)=>{ $("st").textContent="記録を読めませんでした："+(e&&e.code||e); });
 });
 </script>
