@@ -45,6 +45,12 @@ h1{font-size:20px;margin:4px 0 2px;text-wrap:balance}
 .star{color:#d33a3a;font-weight:700}
 .star2{color:#d33a3a;font-weight:700}
 .star0{color:#111;font-weight:700}
+/* パソコンなど広い画面：幅を広げて、ひとこと感想を右側に出す */
+@media (min-width:720px){
+  .wrap{max-width:820px}
+  .ti{display:flex;align-items:baseline;gap:8px}
+  .rc{margin:0 0 0 auto;max-width:55%;text-align:right}
+}
 @media (prefers-reduced-motion:reduce){.prog i{transition:none}}
 </style>
 </head>
