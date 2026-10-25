@@ -44,6 +44,7 @@ h1{font-size:20px;margin:4px 0 2px;text-wrap:balance}
 .row.on .ti,.row.past .ti{color:var(--sub)}
 .star{color:#d33a3a;font-weight:700}
 .star2{color:#d33a3a;font-weight:700}
+.star0{color:#111;font-weight:700}
 @media (prefers-reduced-motion:reduce){.prog i{transition:none}}
 </style>
 </head>
@@ -89,6 +90,7 @@ const VOLS=[
  [34,2004,"ムツキが年長",["ぼくはざりがに","どうぶつのあかちゃん","へんしんペットボトル","かぶとむしのいちねん","たこといかにてる?にてない?","ゴーゴーはしごしゃ","ほしぞらウォッチング","いろがかわった","およぐとりペンギン","ゆきゆきゆき","やさいはいきている","にほんざるのあかちゃんおおきくなったよ!"]]
 ];
 const STAR={"30-1":1,"30-3":1,"34-7":1,"34-10":1};
+const STAR0={"32-3":1,"32-6":1,"32-9":1}; // 「やばい」号（記憶の強さが最上位。黒★）
 const STAR2={"33-11":1,"34-1":1,"34-5":1,"34-9":1}; // 見覚えはある、弱め（☆）
 // ムツキのひとこと感想（右側に出す。メモ dokusho/ビッグサイエンス読書記録.md から）
 const COMMENTS={
@@ -131,7 +133,8 @@ function render(){
       const bx=document.createElement("span"); bx.className="box"; bx.textContent=m?"✓":"";
       const no=document.createElement("span"); no.className="no"; no.textContent=id+"　"+date;
       const ti=document.createElement("span"); ti.className="ti"; ti.textContent=title;
-      if(STAR[id]){const st=document.createElement("span"); st.className="star"; st.textContent=" ★"; ti.appendChild(st);}
+      if(STAR0[id]){const st=document.createElement("span"); st.className="star0"; st.textContent=" ★"; ti.appendChild(st);}
+      else if(STAR[id]){const st=document.createElement("span"); st.className="star"; st.textContent=" ★"; ti.appendChild(st);}
       else if(STAR2[id]){const st=document.createElement("span"); st.className="star2"; st.textContent=" ☆"; ti.appendChild(st);}
       const rt=document.createElement("span"); rt.className="rt";
       if(m){const d=document.createElement("span"); d.className="rd"; d.textContent=m.slice(5).replace("-","/"); rt.appendChild(d);}
@@ -180,7 +183,7 @@ onAuthStateChanged(auth, (user)=>{
   unsub=onSnapshot(DATA_DOC, async (snap)=>{
     if(!snap.exists()){ await setDoc(DATA_DOC, {marks: SEED}); return; }
     marks={...(snap.data().marks||{})}; ready=true; render();
-    $("st").textContent="タップで出納済み（チェック）。右に出納日とひとこと。★は強い見覚えあり（雪の結晶・葉痕の候補）。☆は見覚えあり（弱め）。";
+    $("st").textContent="タップで出納済み（チェック）。右に出納日とひとこと。黒★は「やばい」号（記憶の強さが最上位）。赤★は強い見覚えあり（雪の結晶・葉痕の候補）。☆は見覚えあり（弱め）。";
   }, (e)=>{ $("st").textContent="記録を読めませんでした："+(e&&e.code||e); });
 });
 </script>
