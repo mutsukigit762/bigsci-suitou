@@ -33,7 +33,7 @@ h1{font-size:20px;margin:4px 0 2px;text-wrap:balance}
 .box{flex:none;width:26px;height:26px;border:2px solid var(--sub);border-radius:6px;display:grid;place-items:center;font-size:16px;font-weight:700;color:#fff}
 .row.on{background:var(--donebg)}
 .row.on .box{background:var(--done);border-color:var(--done)}
-.row.past{cursor:default}
+
 .row.past .box{border-style:dashed;border-color:var(--past);color:var(--past);font-size:11px;width:auto;min-width:26px;padding:0 3px}
 .no{flex:none;font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--sub);width:6.6em}
 .ti{min-width:0;flex:1;overflow-wrap:anywhere}
@@ -74,50 +74,48 @@ const SEED = {"32-3":"2026-10-23","32-4":"2026-10-23","32-5":"2026-10-23","32-6"
 
 
 const TODAY=new Date(Date.now()+9*3600e3).toISOString().slice(0,10);
-const ISSUES=[
- [1,"32-1","2002.4","ねことライオンにてる?にてない?"],[1,"32-2","2002.5","どこにいるのかな?"],
- [1,"33-1","2003.4","はな"],[1,"33-2","2003.5","ちいさなつぼみ"],[1,"33-3","2003.6","みずであそぼう"],
- [2,"33-4","2003.7","むしのへんしん"],[2,"33-5","2003.8","すいかがみのった"],[2,"33-6","2003.9","チーターはしる"],[2,"33-7","2003.10","おいもほり"],[2,"33-8","2003.11","なんのうんてんせき?"],
- [3,"33-9","2003.12","きょうりゅうナンバーワン"],[3,"33-10","2004.1","とりのはね"],[3,"33-11","2004.2","チョコレートだいすき"],[3,"33-12","2004.3","ここがせかいいち"],[3,"34-1","2004.4","ぼくはざりがに"],
- [4,"34-2","2004.5","どうぶつのあかちゃん"],[4,"34-3","2004.6","へんしんペットボトル"],[4,"34-4","2004.7","かぶとむしのいちねん"],[4,"34-5","2004.8","たこといかにてる?にてない?"],[4,"34-6","2004.9","ゴーゴーはしごしゃ"],
- [5,"34-7","2004.10","ほしぞらウォッチング"],[5,"34-8","2004.11","いろがかわった"],[5,"34-9","2004.12","およぐとりペンギン"],[5,"34-10","2005.1","ゆきゆきゆき"],[5,"34-11","2005.2","やさいはいきている"],
- [6,"34-12","2005.3","にほんざるのあかちゃんおおきくなったよ!"],[6,"29-11","1999.11","こおりのかたち",1],[6,"30-7","2000.7","かきのきのいちねん",1],[6,"30-1","2000.4","あしあしあし"],[6,"30-3","2000.6","しずく"],
- [0,"32-3","2002.6","だいすきバナナ"],[0,"32-4","2002.7","あさがお さいた"],[0,"32-5","2002.8","どっちが・・・?"],[0,"32-6","2002.9","おおきいね カーフェリー"],
- [0,"32-7","2002.10","どんぐり ころころ"],[0,"32-8","2002.11","どうぶつのかお"],[0,"32-9","2002.12","ケーキやさん"],[0,"32-10","2003.1","ここは なんきょく"],
- [0,"32-11","2003.2","かげで あそぼう"],[0,"32-12","2003.3","うさぎが うまれた"]
+// 巻ごとの題（号の順＝4月号から3月号まで）。巻号n号は (n+3) 月号
+const VOLS=[
+ [30,2000,"姉が年長・兄が年少",["あしあしあし","たけのこずんずん","しずく","ひまわりのはな","こんちゅうオリンピック","ねこねるのがすき","かきのきのいちねん","いえができるまで","なににみえる?","スペースシャトルしゅっぱつ!","ゆきふかふか","はるがきた"]],
+ [31,2001,"兄が年中",["おおきなとりだちょう","いぬのきもち","しんぶんしであそぼう","しおだまりであそぼう","せみのぬけがら","すずめのくらし","りんごみのった","はやいぞしんかんせん","だいすきハムスター","のりができた","ふゆのたんぽぽ","つめつめつめ"]],
+ [32,2002,"兄が年長・ムツキが年少",["ねことライオンにてる?にてない?","どこにいるのかな?","だいすきバナナ","あさがお さいた","どっちが・・・?","おおきいね カーフェリー","どんぐり ころころ","どうぶつのかお","ケーキやさん","ここは なんきょく","かげで あそぼう","うさぎが うまれた"]],
+ [33,2003,"ムツキが年中",["はな","ちいさなつぼみ","みずであそぼう","むしのへんしん","すいかがみのった","チーターはしる","おいもほり","なんのうんてんせき?","きょうりゅうナンバーワン","とりのはね","チョコレートだいすき","ここがせかいいち"]],
+ [34,2004,"ムツキが年長",["ぼくはざりがに","どうぶつのあかちゃん","へんしんペットボトル","かぶとむしのいちねん","たこといかにてる?にてない?","ゴーゴーはしごしゃ","ほしぞらウォッチング","いろがかわった","およぐとりペンギン","ゆきゆきゆき","やさいはいきている","にほんざるのあかちゃんおおきくなったよ!"]],
+ [29,1999,"姉が年中。候補の1冊だけ",[null,null,null,null,null,null,null,null,null,null,"こおりのかたち",null]]
 ];
+const STAR={"29-11":1,"30-11":1,"30-7":1}; // 雪の結晶・葉痕の候補
 let marks={}; let busy={}; let ready=false;
 const $=id=>document.getElementById(id);
+function ym(fy,n){const m=n+3; return m<=12?fy+"."+m:(fy+1)+"."+(m-12);}
 function render(){
   const L=$("list"); L.textContent="";
-  const groups=[1,2,3,4,5,6,0];
-  let todo=0, done=0;
-  for(const g of groups){
-    const rows=ISSUES.filter(r=>r[0]===g);
+  let all=0, done=0;
+  for(const [v,fy,who,titles] of VOLS){
+    const rows=titles.map((t,i)=>t?[v+"-"+(i+1),ym(fy,i+1),t]:null).filter(Boolean);
     const sec=document.createElement("section"); sec.className="grp";
     const h=document.createElement("div"); h.className="gh";
-    const n=rows.filter(r=>marks[r[1]]===TODAY).length;
-    h.textContent=g?g+"回目":"10/23に読んだ号";
-    const s=document.createElement("span"); s.textContent=g?n+" / "+rows.length:rows.length+"冊"; h.appendChild(s);
+    const n=rows.filter(r=>marks[r[0]]).length;
+    h.textContent=v+"巻　"+fy+"年度（"+who+"）";
+    const s=document.createElement("span"); s.textContent=n+" / "+rows.length; h.appendChild(s);
     sec.appendChild(h);
-    for(const r of rows){
-      const id=r[1], m=marks[id], past=m&&m!==TODAY, on=m===TODAY;
-      if(g){todo++; if(on)done++;}
+    for(const [id,date,title] of rows){
+      all++; const m=marks[id]; if(m)done++;
+      const on=m===TODAY, past=m&&!on;
       const b=document.createElement("button"); b.type="button";
       b.className="row"+(on?" on":"")+(past?" past":"");
-      b.setAttribute("aria-pressed",on?"true":"false");
+      b.setAttribute("aria-pressed",m?"true":"false");
       const bx=document.createElement("span"); bx.className="box"; bx.textContent=on?"✓":(past?m.slice(5).replace("-","/"):"");
-      const no=document.createElement("span"); no.className="no"; no.textContent=id+"　"+r[2];
-      const ti=document.createElement("span"); ti.className="ti"; ti.textContent=r[3];
-      if(r[4]){const st=document.createElement("span"); st.className="star"; st.textContent=" ★"; ti.appendChild(st);}
+      const no=document.createElement("span"); no.className="no"; no.textContent=id+"　"+date;
+      const ti=document.createElement("span"); ti.className="ti"; ti.textContent=title;
+      if(STAR[id]){const st=document.createElement("span"); st.className="star"; st.textContent=" ★"; ti.appendChild(st);}
       b.append(bx,no,ti);
-      if(!past) b.addEventListener("click",()=>toggle(id));
+      b.addEventListener("click",()=>toggle(id));
       sec.appendChild(b);
     }
     L.appendChild(sec);
   }
-  $("ct").textContent=done+" / "+todo;
-  $("pg").style.width=(todo?done/todo*100:0)+"%";
+  $("ct").textContent=done+" / "+all;
+  $("pg").style.width=(all?done/all*100:0)+"%";
 }
 
 async function toggle(id){
@@ -153,7 +151,7 @@ onAuthStateChanged(auth, (user)=>{
   unsub=onSnapshot(DATA_DOC, async (snap)=>{
     if(!snap.exists()){ await setDoc(DATA_DOC, {marks: SEED}); return; }
     marks={...(snap.data().marks||{})}; ready=true; render();
-    $("st").textContent="タップでチェック。★は雪の結晶・葉痕の候補。6回目の30巻は覚えている号。";
+    $("st").textContent="タップでチェック。★は雪の結晶・葉痕の候補。";
   }, (e)=>{ $("st").textContent="記録を読めませんでした："+(e&&e.code||e); });
 });
 </script>
