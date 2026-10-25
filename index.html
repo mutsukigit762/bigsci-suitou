@@ -35,11 +35,11 @@ h1{font-size:20px;margin:4px 0 2px;text-wrap:balance}
 .row.on .box{background:var(--done);border-color:var(--done)}
 
 .row.past .box{background:var(--done);border-color:var(--done)}
-.rt{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:2px;max-width:44%;text-align:right;font-size:12px;line-height:1.4;color:var(--sub)}
+.rt{flex:none;text-align:right;font-size:12px;line-height:1.4;color:var(--sub);white-space:nowrap}
 .rt:empty{display:none}
 .rd{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink)}
-.rc{overflow-wrap:anywhere}
-.no{flex:none;font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--sub);width:6.6em}
+.rc{display:block;margin-top:2px;font-size:12px;line-height:1.4;color:var(--sub);overflow-wrap:anywhere}
+.no{flex:none;font-variant-numeric:tabular-nums;font-size:12px;color:var(--sub);width:5.6em;line-height:1.3}
 .ti{min-width:0;flex:1;overflow-wrap:anywhere}
 .row.on .ti,.row.past .ti{color:var(--sub)}
 .star{color:#d33a3a;font-weight:700}
@@ -137,7 +137,7 @@ function render(){
       else if(STAR[id]||STAR2[id]){const st=document.createElement("span"); st.className="star"; st.textContent=" ⭐︎"; ti.appendChild(st);}
       const rt=document.createElement("span"); rt.className="rt";
       if(m){const d=document.createElement("span"); d.className="rd"; d.textContent=m.slice(5).replace("-","/"); rt.appendChild(d);}
-      if(COMMENTS[id]){const c=document.createElement("span"); c.className="rc"; c.textContent=COMMENTS[id]; rt.appendChild(c);}
+      if(COMMENTS[id]){const c=document.createElement("span"); c.className="rc"; c.textContent=COMMENTS[id]; ti.appendChild(c);}
       b.append(bx,no,ti,rt);
       b.addEventListener("click",()=>toggle(id));
       sec.appendChild(b);
